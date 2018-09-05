@@ -24,7 +24,7 @@ type ContactDetails struct {
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Hi there, is your name %s?", r.URL.Path[1:])
+    fmt.Fprintf(w, "[Webapp2] Hi there, is your name %s?", r.URL.Path[1:])
 }
 
 func main() {
