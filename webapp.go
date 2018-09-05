@@ -4,7 +4,8 @@ import (
     "fmt"
     "log"
 	"html/template"
-	"net/http"
+    "net/http"
+    "github.com/gobuffalo/packr"
 )
 
 type Todo struct {
@@ -27,12 +28,12 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	
+	box := packr.NewBox("./templates")
     log.Printf("Running on port 8080")
-    
+
     http.HandleFunc("/", rootHandler)
 
-    staticTmpl := template.Must(template.ParseFiles("layout.html"))    
+    staticTmpl := template.Must(template.New("staticTempl").Parse(box.String("layout.html")))    
 	http.HandleFunc("/static", func(w http.ResponseWriter, r *http.Request) {
 		data := TodoPageData{
 			PageTitle: "My TODO list",
@@ -45,7 +46,7 @@ func main() {
 		staticTmpl.Execute(w, data)
     })
     
-	formsTmpl := template.Must(template.ParseFiles("forms.html"))
+    formsTmpl := template.Must(template.New("formsTmpl").Parse(box.String("forms.html")))    
 
 	http.HandleFunc("/contact", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
